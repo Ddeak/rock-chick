@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "import"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "ignorePatterns": ["node_modules", ".next", "dist", ".vercel"],
+  "rules": {
+    "eslint/no-unused-vars": "warn",
+    "eslint/no-console": "off"
+  }
+}

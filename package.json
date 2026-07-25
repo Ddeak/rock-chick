@@ -1,0 +1,19 @@
+{
+  "name": "rock-chick",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev:frontend": "bun run --cwd frontend dev",
+    "dev:backend": "bun run --cwd backend dev",
+    "lint": "oxlint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "oxlint": "^1.75.0",
+    "prettier": "^3.9.6"
+  }
+}
