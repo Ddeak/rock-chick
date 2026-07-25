@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Fredoka, Nunito } from 'next/font/google';
+import { TopBar } from '@/components/TopBar';
 import './globals.css';
 
 const nunito = Nunito({
@@ -13,8 +14,11 @@ const fredoka = Fredoka({
 });
 
 export const metadata: Metadata = {
-  title: 'Rock Chick Farm',
-  description: "Fresh baked goods from Rock Chick Farm",
+  title: {
+    default: 'Rock Chick Farm',
+    template: '%s | Rock Chick Farm',
+  },
+  description: 'Fresh baked goods from Rock Chick Farm',
 };
 
 export default function RootLayout({
@@ -24,7 +28,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${nunito.variable} ${fredoka.variable}`}>
-      <body>{children}</body>
+      <body>
+        <TopBar />
+        {children}
+      </body>
     </html>
   );
 }
