@@ -1,12 +1,9 @@
 import { ComingSoon } from '@/components/ComingSoon';
-import { getStoryblokApi } from '@/lib/storyblok';
+import { getStoryBySlug } from '@/lib/storyblok';
 
 export default async function HomePage() {
-  const storyblokApi = getStoryblokApi();
-  const { data } = await storyblokApi.get('cdn/stories/home', {
-    version: process.env.NODE_ENV === 'production' ? 'published' : 'draft',
-  });
-  const headline = data.story.content.body?.[0]?.headline as string | undefined;
+  const story = await getStoryBySlug('home');
+  const headline = story?.content?.body?.[0]?.headline as string | undefined;
 
   return (
     <>
