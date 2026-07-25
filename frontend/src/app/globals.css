@@ -1,1 +1,45 @@
 @import 'tailwindcss';
+
+@theme {
+  /* Fonts (wired up in layout.tsx via next/font/google) */
+  --font-sans: var(--font-nunito), sans-serif;
+  --font-display: var(--font-fredoka), sans-serif;
+
+  /* Base surface + text */
+  --color-background: #fffdf8; /* warm cream, not stark white */
+  --color-foreground: #3a2e23; /* toasted-crust brown, not pure black */
+
+  /* Card / section surfaces */
+  --color-card: #fbf7ef;
+  --color-card-foreground: var(--color-foreground);
+
+  /* Muted text (captions, helper text, timestamps) */
+  --color-muted: #f5f1ea;
+  --color-muted-foreground: #6e6354;
+
+  /* Borders / dividers */
+  --color-border: #d9cfbc;
+
+  /* Primary: chick yellow — logo/brand color */
+  --color-primary: #f5c518;
+  --color-primary-foreground: #3a2e23; /* dark text ON yellow */
+  --color-primary-strong: #8a6a00; /* golden, for yellow-family text/links ON cream */
+
+  /* Secondary: pink — bakery accent */
+  --color-secondary: #f7c6d9; /* soft blush, for backgrounds/badges */
+  --color-secondary-foreground: #3a2e23; /* dark text ON blush */
+  --color-secondary-strong: #c2447a; /* berry rose, for pink text/buttons ON cream */
+  --color-secondary-strong-foreground: #ffffff;
+
+  /* Semantic (order flow: in stock / low stock / errors) */
+  --color-success: #3f7d4e;
+  --color-success-foreground: #ffffff;
+  --color-error: #b3402a;
+  --color-error-foreground: #ffffff;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+}
