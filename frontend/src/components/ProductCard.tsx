@@ -1,9 +1,30 @@
+'use client';
+
 import Image from 'next/image';
+import { useState } from 'react';
+import { useCart } from '@/components/CartProvider';
+import { QuantitySelector } from '@/components/QuantitySelector';
 import { humanizeSlug } from '@/lib/format';
 import type { Product } from '@/lib/storyblok';
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ uuid, product }: { uuid: string; product: Product }) {
+  const { dispatch } = useCart();
+  const [quantity, setQuantity] = useState(1);
   const seasons = (product.season ?? []).filter((s) => s !== 'year-round');
+
+  function handleAddToCart() {
+    dispatch({
+      type: 'ADD_ITEM',
+      item: {
+        uuid,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+      },
+      quantity,
+    });
+    setQuantity(1);
+  }
 
   return (
     <div className="flex flex-col rounded-lg border border-border bg-card p-4">
@@ -54,6 +75,17 @@ export function ProductCard({ product }: { product: Product }) {
           ))}
         </div>
       )}
+
+      <div className="mt-4 flex items-center justify-between gap-2">
+        <QuantitySelector value={quantity} onChange={setQuantity} />
+        <button
+          type="button"
+          onClick={handleAddToCart}
+          className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+        >
+          Add to Cart
+        </button>
+      </div>
     </div>
   );
 }

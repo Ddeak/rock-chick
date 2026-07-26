@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import { Fredoka, Nunito } from 'next/font/google';
+import { CartAwareContent } from '@/components/CartAwareContent';
+import { CartProvider } from '@/components/CartProvider';
+import { StickyCartSummary } from '@/components/StickyCartSummary';
 import { TopBar } from '@/components/TopBar';
 import './globals.css';
 
@@ -29,8 +32,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${nunito.variable} ${fredoka.variable}`}>
       <body>
-        <TopBar />
-        {children}
+        <CartProvider>
+          <TopBar />
+          <CartAwareContent>{children}</CartAwareContent>
+          <StickyCartSummary />
+        </CartProvider>
       </body>
     </html>
   );

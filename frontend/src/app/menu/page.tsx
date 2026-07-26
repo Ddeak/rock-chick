@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { ComingSoon } from '@/components/ComingSoon';
-import { ProductGrid } from '@/components/ProductGrid';
+import { MenuList } from '@/components/MenuList';
 import { getAllProducts } from '@/lib/storyblok';
 
 export const metadata: Metadata = {
@@ -15,8 +15,8 @@ export default async function MenuPage() {
   }
 
   return (
-    <main className="mx-auto max-w-4xl p-8">
-      <ProductGrid products={products} />
+    <main className="mx-auto max-w-2xl p-8">
+      <MenuList products={products} />
     </main>
   );
 }
