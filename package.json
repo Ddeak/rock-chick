@@ -8,7 +8,9 @@
   "scripts": {
     "predev": "lsof -ti:3000,3001 -sTCP:LISTEN | xargs -r kill 2>/dev/null; true",
     "dev": "concurrently -n frontend,backend -c blue,green --restart-tries 3 --restart-after 1000 \"bun run dev:frontend\" \"bun run dev:backend\"",
+    "predev:frontend": "lsof -ti:3000 -sTCP:LISTEN | xargs -r kill 2>/dev/null; true",
     "dev:frontend": "bun run --cwd frontend dev",
+    "predev:backend": "lsof -ti:3001 -sTCP:LISTEN | xargs -r kill 2>/dev/null; true",
     "dev:backend": "bun run --cwd backend dev",
     "lint": "oxlint",
     "format": "prettier --write .",
