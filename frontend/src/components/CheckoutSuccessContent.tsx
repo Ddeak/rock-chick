@@ -10,7 +10,7 @@ type Status = 'checking' | 'success' | 'error';
 export function CheckoutSuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
-  const { dispatch } = useCart();
+  const { dispatch, setPickupDate } = useCart();
   const [status, setStatus] = useState<Status>('checking');
 
   useEffect(() => {
@@ -32,6 +32,7 @@ export function CheckoutSuccessContent() {
         }
         if (res.ok && data.paid) {
           dispatch({ type: 'CLEAR_CART' });
+          setPickupDate(null);
           setStatus('success');
         } else {
           setStatus('error');
@@ -48,7 +49,7 @@ export function CheckoutSuccessContent() {
     return () => {
       cancelled = true;
     };
-  }, [sessionId, dispatch]);
+  }, [sessionId, dispatch, setPickupDate]);
 
   return (
     <div className="text-center">

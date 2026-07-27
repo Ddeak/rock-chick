@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { href: '/about', label: 'About' },
   { href: '/menu', label: 'Menu' },
   { href: '/order', label: 'Order' },
+  { href: '/order/standing', label: 'Order Ahead' },
   { href: '/contact', label: 'Contact' },
   { href: '/cart', label: 'Cart' },
 ];

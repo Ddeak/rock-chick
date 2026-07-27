@@ -10,9 +10,8 @@ import { QuantitySelector } from '@/components/QuantitySelector';
 import { getCartOrderType } from '@/lib/cart';
 
 export function CartPageContent() {
-  const { items, dispatch } = useCart();
+  const { items, dispatch, pickupDate, setPickupDate } = useCart();
   const orderType = getCartOrderType(items) ?? 'weekly';
-  const [pickupDate, setPickupDate] = useState<string | null>(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 

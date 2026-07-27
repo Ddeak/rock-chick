@@ -10,7 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default async function OrderPage() {
-  const products = await getAllProducts();
+  const allProducts = await getAllProducts();
+  const products = allProducts.filter((p) => p.content.order_type !== 'standing');
 
   if (products.length === 0) {
     return <ComingSoon title="Order" />;
