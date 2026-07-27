@@ -6,9 +6,12 @@ import { MAX_QUANTITY, MIN_QUANTITY, clampQuantity } from '@/lib/cart';
 interface QuantitySelectorProps {
   value: number;
   onChange: (value: number) => void;
+  max?: number;
 }
 
-export function QuantitySelector({ value, onChange }: QuantitySelectorProps) {
+export function QuantitySelector({ value, onChange, max = MAX_QUANTITY }: QuantitySelectorProps) {
+  const effectiveMax = Math.min(MAX_QUANTITY, max);
+
   return (
     <div className="inline-flex items-center rounded-full border border-border">
       <button
@@ -24,12 +27,12 @@ export function QuantitySelector({ value, onChange }: QuantitySelectorProps) {
         type="number"
         inputMode="numeric"
         min={MIN_QUANTITY}
-        max={MAX_QUANTITY}
+        max={effectiveMax}
         value={value}
         onChange={(e) => {
           const parsed = Number(e.target.value);
           if (!Number.isNaN(parsed)) {
-            onChange(clampQuantity(parsed));
+            onChange(Math.min(effectiveMax, clampQuantity(parsed)));
           }
         }}
         aria-label="Quantity"
@@ -37,8 +40,8 @@ export function QuantitySelector({ value, onChange }: QuantitySelectorProps) {
       />
       <button
         type="button"
-        onClick={() => onChange(clampQuantity(value + 1))}
-        disabled={value >= MAX_QUANTITY}
+        onClick={() => onChange(Math.min(effectiveMax, clampQuantity(value + 1)))}
+        disabled={value >= effectiveMax}
         aria-label="Increase quantity"
         className="flex h-11 w-11 items-center justify-center text-foreground disabled:opacity-40"
       >

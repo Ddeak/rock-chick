@@ -3,7 +3,13 @@ import { groupByCategory } from '@/lib/products';
 import type { ProductStory } from '@/lib/storyblok';
 import { ProductCard } from '@/components/ProductCard';
 
-export function ProductGrid({ products }: { products: ProductStory[] }) {
+export function ProductGrid({
+  products,
+  stockByUuid,
+}: {
+  products: ProductStory[];
+  stockByUuid: Record<string, number>;
+}) {
   const categories = groupByCategory(products);
 
   return (
@@ -15,7 +21,12 @@ export function ProductGrid({ products }: { products: ProductStory[] }) {
           </h2>
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((story) => (
-              <ProductCard key={story.uuid} uuid={story.uuid} product={story.content} />
+              <ProductCard
+                key={story.uuid}
+                uuid={story.uuid}
+                product={story.content}
+                stock={stockByUuid[story.uuid] ?? 0}
+              />
             ))}
           </div>
         </section>

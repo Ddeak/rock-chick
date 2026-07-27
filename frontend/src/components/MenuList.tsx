@@ -2,7 +2,13 @@ import { humanizeSlug } from '@/lib/format';
 import { groupByCategory } from '@/lib/products';
 import type { ProductStory } from '@/lib/storyblok';
 
-export function MenuList({ products }: { products: ProductStory[] }) {
+export function MenuList({
+  products,
+  stockByUuid,
+}: {
+  products: ProductStory[];
+  stockByUuid: Record<string, number>;
+}) {
   const categories = groupByCategory(products);
 
   return (
@@ -13,21 +19,32 @@ export function MenuList({ products }: { products: ProductStory[] }) {
             {humanizeSlug(category)}
           </h2>
           <ul className="mt-3 divide-y divide-border">
-            {items.map((story) => (
-              <li key={story.uuid} className="flex items-baseline justify-between gap-4 py-2">
-                <span className="text-foreground">
-                  {story.content.name}
-                  {story.content.labels && story.content.labels.length > 0 && (
-                    <span className="ml-2 text-sm text-muted-foreground">
-                      ({story.content.labels.map(humanizeSlug).join(', ')})
-                    </span>
-                  )}
-                </span>
-                <span className="whitespace-nowrap font-medium text-foreground">
-                  ${story.content.price.toFixed(2)}
-                </span>
-              </li>
-            ))}
+            {items.map((story) => {
+              const isSoldOut = (stockByUuid[story.uuid] ?? 0) <= 0;
+              return (
+                <li
+                  key={story.uuid}
+                  className={`flex items-baseline justify-between gap-4 py-2 ${
+                    isSoldOut ? 'text-muted-foreground' : ''
+                  }`}
+                >
+                  <span className={isSoldOut ? '' : 'text-foreground'}>
+                    {story.content.name}
+                    {story.content.labels && story.content.labels.length > 0 && (
+                      <span className="ml-2 text-sm text-muted-foreground">
+                        ({story.content.labels.map(humanizeSlug).join(', ')})
+                      </span>
+                    )}
+                    {isSoldOut && <span className="ml-2 text-sm text-error">(Sold out)</span>}
+                  </span>
+                  <span
+                    className={`whitespace-nowrap font-medium ${isSoldOut ? '' : 'text-foreground'}`}
+                  >
+                    ${story.content.price.toFixed(2)}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         </section>
       ))}

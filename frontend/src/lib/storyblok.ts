@@ -27,6 +27,7 @@ export interface Product {
   labels?: string[];
   categories?: string[];
   season?: string[];
+  order_type?: 'weekly' | 'standing';
 }
 
 export interface ProductStory {

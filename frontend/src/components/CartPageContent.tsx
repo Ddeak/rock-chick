@@ -5,14 +5,23 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useCart } from '@/components/CartProvider';
+import { PickupDateSelector } from '@/components/PickupDateSelector';
 import { QuantitySelector } from '@/components/QuantitySelector';
+import { getCartOrderType } from '@/lib/cart';
 
 export function CartPageContent() {
   const { items, dispatch } = useCart();
+  const orderType = getCartOrderType(items) ?? 'weekly';
+  const [pickupDate, setPickupDate] = useState<string | null>(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   async function handleCheckout() {
+    if (!pickupDate) {
+      setCheckoutError('Please select a pickup date.');
+      return;
+    }
+
     setIsCheckingOut(true);
     setCheckoutError(null);
     try {
@@ -24,6 +33,7 @@ export function CartPageContent() {
             uuid: item.uuid,
             quantity: item.quantity,
           })),
+          pickupDate,
         }),
       });
       const data = (await res.json()) as { url?: string; error?: string };
@@ -31,8 +41,12 @@ export function CartPageContent() {
         throw new Error(data.error ?? 'Unable to start checkout');
       }
       window.location.href = data.url;
-    } catch {
-      setCheckoutError('Something went wrong starting checkout. Please try again.');
+    } catch (error) {
+      setCheckoutError(
+        error instanceof Error
+          ? error.message
+          : 'Something went wrong starting checkout. Please try again.',
+      );
       setIsCheckingOut(false);
     }
   }
@@ -101,6 +115,12 @@ export function CartPageContent() {
           ${total.toFixed(2)}
         </span>
       </div>
+
+      <PickupDateSelector
+        selectedDate={pickupDate}
+        onSelect={setPickupDate}
+        orderType={orderType}
+      />
 
       {checkoutError && <p className="text-sm text-error">{checkoutError}</p>}
 

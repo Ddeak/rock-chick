@@ -10,12 +10,24 @@ function getTotalQuantity(items: CartItem[]): number {
   return items.reduce((sum, item) => sum + item.quantity, 0);
 }
 
+export type OrderType = 'weekly' | 'standing';
+
 export interface CartItem {
   uuid: string;
   name: string;
   price: number;
   image?: { filename: string; alt?: string };
   quantity: number;
+  orderType: OrderType;
+}
+
+// A cart can only contain one order type at a time — "This Week's Menu"
+// and "Standing Menu" items have fundamentally different pickup-date rules
+// (one fixed upcoming date vs. any future date), so mixing them in one
+// checkout doesn't make sense. Exposed so the UI can check before adding,
+// rather than silently no-op-ing on a rejected dispatch.
+export function getCartOrderType(items: CartItem[]): OrderType | null {
+  return items[0]?.orderType ?? null;
 }
 
 export type CartAction =
@@ -28,6 +40,10 @@ export type CartAction =
 export function cartReducer(state: CartItem[], action: CartAction): CartItem[] {
   switch (action.type) {
     case 'ADD_ITEM': {
+      const cartOrderType = getCartOrderType(state);
+      if (cartOrderType && cartOrderType !== action.item.orderType) {
+        return state;
+      }
       const existing = state.find((i) => i.uuid === action.item.uuid);
       const othersTotal = getTotalQuantity(state) - (existing?.quantity ?? 0);
       const room = MAX_CART_ITEMS - othersTotal;

@@ -4,15 +4,37 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useCart } from '@/components/CartProvider';
 import { QuantitySelector } from '@/components/QuantitySelector';
+import { getCartOrderType } from '@/lib/cart';
 import { humanizeSlug } from '@/lib/format';
 import type { Product } from '@/lib/storyblok';
 
-export function ProductCard({ uuid, product }: { uuid: string; product: Product }) {
-  const { dispatch } = useCart();
+export function ProductCard({
+  uuid,
+  product,
+  stock,
+}: {
+  uuid: string;
+  product: Product;
+  stock: number;
+}) {
+  const { items, dispatch } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [blockedMessage, setBlockedMessage] = useState<string | null>(null);
   const seasons = (product.season ?? []).filter((s) => s !== 'year-round');
+  const isSoldOut = stock <= 0;
+  const orderType = product.order_type ?? 'weekly';
 
   function handleAddToCart() {
+    const cartOrderType = getCartOrderType(items);
+    if (cartOrderType && cartOrderType !== orderType) {
+      setBlockedMessage(
+        cartOrderType === 'weekly'
+          ? "Finish or clear your This Week's Menu order before adding a Standing Menu item."
+          : "Finish or clear your Standing Menu order before adding a This Week's Menu item.",
+      );
+      return;
+    }
+    setBlockedMessage(null);
     dispatch({
       type: 'ADD_ITEM',
       item: {
@@ -20,6 +42,7 @@ export function ProductCard({ uuid, product }: { uuid: string; product: Product 
         name: product.name,
         price: product.price,
         image: product.image,
+        orderType,
       },
       quantity,
     });
@@ -34,7 +57,7 @@ export function ProductCard({ uuid, product }: { uuid: string; product: Product 
             src={product.image.filename}
             alt={product.image.alt || product.name}
             fill
-            className="object-cover"
+            className={`object-cover ${isSoldOut ? 'grayscale' : ''}`}
           />
         </div>
       )}
@@ -76,12 +99,19 @@ export function ProductCard({ uuid, product }: { uuid: string; product: Product 
         </div>
       )}
 
+      <p className={`mt-2 text-xs font-medium ${isSoldOut ? 'text-error' : 'text-success'}`}>
+        {isSoldOut ? 'Sold out' : `${stock} left this week`}
+      </p>
+
+      {blockedMessage && <p className="mt-2 text-xs text-error">{blockedMessage}</p>}
+
       <div className="mt-4 flex items-center justify-between gap-2">
-        <QuantitySelector value={quantity} onChange={setQuantity} />
+        <QuantitySelector value={quantity} onChange={setQuantity} max={stock} />
         <button
           type="button"
           onClick={handleAddToCart}
-          className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+          disabled={isSoldOut}
+          className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-50"
         >
           Add to Cart
         </button>
