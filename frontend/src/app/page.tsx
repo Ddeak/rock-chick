@@ -1,4 +1,5 @@
 import { ComingSoon } from '@/components/ComingSoon';
+import { HomeFeatures } from '@/components/HomeFeatures';
 import { HomeHero } from '@/components/HomeHero';
 import { getHomePageContent } from '@/lib/storyblok';
 
@@ -9,5 +10,10 @@ export default async function HomePage() {
     return <ComingSoon title="Home" />;
   }
 
-  return <HomeHero image={home.heroImage} heading={home.heroHeading} />;
+  return (
+    <>
+      <HomeHero image={home.heroImage} heading={home.heroHeading} />
+      <HomeFeatures />
+    </>
+  );
 }

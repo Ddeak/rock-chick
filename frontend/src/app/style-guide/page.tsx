@@ -1,10 +1,11 @@
-import { Plus } from 'lucide-react';
+import { Calendar, Heart, Home, Leaf, MapPin, Plus, Sparkles } from 'lucide-react';
 import type { Metadata } from 'next';
 import { Button } from '@/components/common/Button';
 import { Heading } from '@/components/common/Heading';
 import { IconButton } from '@/components/common/IconButton';
 import { Pill } from '@/components/common/Pill';
 import { Text } from '@/components/common/Text';
+import { FeatureBadge } from '@/components/FeatureBadge';
 
 export const metadata: Metadata = {
   title: 'Style Guide',
@@ -71,6 +72,14 @@ export default function StyleGuidePage() {
         </div>
         <Text>Three tiers, vanilla and raspberry filling</Text>
         <Text variant="tag">GLUTEN FREE</Text>
+      </div>
+
+      <div className="flex flex-wrap justify-center gap-4">
+        <FeatureBadge icon={Leaf} label="Organic" variant="primary" />
+        <FeatureBadge icon={Heart} label="Handmade" variant="secondary" />
+        <FeatureBadge icon={MapPin} label="Local" variant="primary" />
+        <FeatureBadge icon={Sparkles} label="Fresh Daily" variant="secondary" />
+        <FeatureBadge icon={Home} label="Family Owned" variant="primary" />
       </div>
 
       <div className="flex flex-wrap gap-3">
