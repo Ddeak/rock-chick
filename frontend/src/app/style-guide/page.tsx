@@ -6,6 +6,8 @@ import { IconButton } from '@/components/common/IconButton';
 import { Pill } from '@/components/common/Pill';
 import { Text } from '@/components/common/Text';
 import { FeatureBadge } from '@/components/FeatureBadge';
+import { HomeAbout } from '@/components/HomeAbout';
+import { StoryCard } from '@/components/StoryCard';
 
 export const metadata: Metadata = {
   title: 'Style Guide',
@@ -74,12 +76,39 @@ export default function StyleGuidePage() {
         <Text variant="tag">GLUTEN FREE</Text>
       </div>
 
+      <div className="max-w-[350px]">
+        <StoryCard
+          post={{
+            title: 'Why Quality Ingredients Matter',
+            excerpt:
+              'We source local, organic flour and butter for every bake — it shows in the taste.',
+            tags: ['quality-matters'],
+            stats: [
+              { _uid: 'demo-1', value: '100%', label: 'Natural' },
+              { _uid: 'demo-2', value: 'Zero', label: 'Additives' },
+            ],
+          }}
+        />
+      </div>
+
       <div className="flex flex-wrap justify-center gap-4">
         <FeatureBadge icon={Leaf} label="Organic" variant="primary" />
         <FeatureBadge icon={Heart} label="Handmade" variant="secondary" />
         <FeatureBadge icon={MapPin} label="Local" variant="primary" />
         <FeatureBadge icon={Sparkles} label="Fresh Daily" variant="secondary" />
         <FeatureBadge icon={Home} label="Family Owned" variant="primary" />
+        <FeatureBadge icon={Calendar} label="Custom Orders" variant="secondary" />
+      </div>
+
+      <div className="max-w-md rounded-lg border border-border">
+        <HomeAbout
+          title="Meet Sarah"
+          quote="I started baking as a way to bring my family together — every recipe here has a story behind it."
+          snippets={[
+            { _uid: 'demo-1', icon: 'calendar', label: 'FOUNDED', value: '2015' },
+            { _uid: 'demo-2', icon: 'heart', label: 'RECIPES', value: 'Family owned' },
+          ]}
+        />
       </div>
 
       <div className="flex flex-wrap gap-3">

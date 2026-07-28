@@ -2,11 +2,13 @@ import type { ComponentPropsWithoutRef, ElementType } from 'react';
 
 const SIZE_CLASSES = {
   h1: 'text-[32px] leading-10 font-bold',
+  h2: 'text-2xl leading-8 font-bold',
   h3: 'text-sm leading-5 font-semibold',
 } as const;
 
 const DEFAULT_ELEMENT: Record<keyof typeof SIZE_CLASSES, ElementType> = {
   h1: 'h1',
+  h2: 'h2',
   h3: 'h3',
 };
 

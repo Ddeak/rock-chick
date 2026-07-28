@@ -18,15 +18,35 @@ export async function getStoryBySlug(slug: string) {
   }
 }
 
+export interface AboutSnippet {
+  icon?: string;
+  label: string;
+  value: string;
+}
+
 export interface HomePageContent {
   heroImage: { filename: string; alt?: string };
   heroHeading?: string;
+  stories: (StoryPost & { _uid: string })[];
+  aboutImage?: { filename: string; alt?: string };
+  aboutTitle?: string;
+  aboutQuote?: string;
+  aboutSnippets: (AboutSnippet & { _uid: string })[];
 }
 
 export async function getHomePageContent(): Promise<HomePageContent | null> {
   const story = await getStoryBySlug('home');
   const content = story?.content as
-    { hero_image?: { filename: string; alt?: string }; hero_heading?: string } | undefined;
+    | {
+        hero_image?: { filename: string; alt?: string };
+        hero_heading?: string;
+        stories?: (StoryPost & { _uid: string })[];
+        about_image?: { filename: string; alt?: string };
+        about_title?: string;
+        about_quote?: string;
+        about_snippets?: (AboutSnippet & { _uid: string })[];
+      }
+    | undefined;
 
   if (!content?.hero_image?.filename) {
     return null;
@@ -35,6 +55,11 @@ export async function getHomePageContent(): Promise<HomePageContent | null> {
   return {
     heroImage: content.hero_image,
     heroHeading: content.hero_heading,
+    stories: content.stories ?? [],
+    aboutImage: content.about_image,
+    aboutTitle: content.about_title,
+    aboutQuote: content.about_quote,
+    aboutSnippets: content.about_snippets ?? [],
   };
 }
 
@@ -72,4 +97,17 @@ export async function getAllProducts(): Promise<ProductStory[]> {
   } catch {
     return [];
   }
+}
+
+export interface StoryStat {
+  value: string;
+  label: string;
+}
+
+export interface StoryPost {
+  title: string;
+  excerpt?: string;
+  image?: { filename: string; alt?: string };
+  tags?: string[];
+  stats?: (StoryStat & { _uid: string })[];
 }
