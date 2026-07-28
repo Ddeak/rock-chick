@@ -18,6 +18,26 @@ export async function getStoryBySlug(slug: string) {
   }
 }
 
+export interface HomePageContent {
+  heroImage: { filename: string; alt?: string };
+  heroHeading?: string;
+}
+
+export async function getHomePageContent(): Promise<HomePageContent | null> {
+  const story = await getStoryBySlug('home');
+  const content = story?.content as
+    { hero_image?: { filename: string; alt?: string }; hero_heading?: string } | undefined;
+
+  if (!content?.hero_image?.filename) {
+    return null;
+  }
+
+  return {
+    heroImage: content.hero_image,
+    heroHeading: content.hero_heading,
+  };
+}
+
 export interface Product {
   name: string;
   price: number;

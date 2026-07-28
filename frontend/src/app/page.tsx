@@ -1,18 +1,13 @@
 import { ComingSoon } from '@/components/ComingSoon';
-import { getStoryBySlug } from '@/lib/storyblok';
+import { HomeHero } from '@/components/HomeHero';
+import { getHomePageContent } from '@/lib/storyblok';
 
 export default async function HomePage() {
-  const story = await getStoryBySlug('home');
-  const headline = story?.content?.body?.[0]?.headline as string | undefined;
+  const home = await getHomePageContent();
 
-  return (
-    <>
-      <ComingSoon title="Home" />
-      {headline && (
-        <p className="mx-auto max-w-2xl px-8 text-sm text-muted-foreground">
-          Live from Storyblok: &ldquo;{headline}&rdquo;
-        </p>
-      )}
-    </>
-  );
+  if (!home) {
+    return <ComingSoon title="Home" />;
+  }
+
+  return <HomeHero image={home.heroImage} heading={home.heroHeading} />;
 }
